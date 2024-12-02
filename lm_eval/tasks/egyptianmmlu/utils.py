@@ -1,4 +1,4 @@
-PROMPT = "هادا سؤال متعدد الخيارات (مع الجواب ديالو) على {}\n\n{}\n{}\nالجواب:"
+PROMPT = "ده سؤال اختيار من متعدد (مع إجابته) عن {}\n\n{}\n{}\nالاجابة:"
 
 
 alpha = ["A.", "B.", "C.", "D.", "E."]
@@ -14,11 +14,10 @@ def doc_to_text(doc):
     )
 
     options = []
-    for i, opt in enumerate(eval(doc["choices"])):
+    for i, opt in enumerate(eval(str(doc["choices"]))):
         options.append(f"{alpha[i]} {opt}")
     doc_text = PROMPT.format(subject, question, "\n".join(options))
     return doc_text
 
-
 def doc_to_choice(doc):
-    return [alpha[i][0] for i in range(len(eval(doc['choices'])))]
+    return [alpha[i][0] for i in range(len(eval(str(doc['choices']))))]
