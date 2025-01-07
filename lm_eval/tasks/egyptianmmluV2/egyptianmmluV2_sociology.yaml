@@ -1,0 +1,7 @@
+"dataset_name": "sociology"
+"include": "_default_egyptianmmluV2_template_yaml"
+"tag":
+- "egyptianmmluV2_social_sciences_tasks"
+- "egyptianmmluV2_mmlu_tasks"
+"task": "egyptianmmluV2_sociology"
+"task_alias": "sociology"

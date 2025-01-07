@@ -1,0 +1,7 @@
+"dataset_name": "law"
+"include": "_default_egyptianmmluV2_template_yaml"
+"tag":
+- "egyptianmmluV2_humanities_tasks"
+- "egyptianmmluV2_arabic_mmlu_tasks"
+"task": "egyptianmmluV2_law"
+"task_alias": "law"

@@ -1,0 +1,7 @@
+"dataset_name": "marketing"
+"include": "_default_egyptianmmluV2_template_yaml"
+"tag":
+- "egyptianmmluV2_other_tasks"
+- "egyptianmmluV2_mmlu_tasks"
+"task": "egyptianmmluV2_marketing"
+"task_alias": "marketing"

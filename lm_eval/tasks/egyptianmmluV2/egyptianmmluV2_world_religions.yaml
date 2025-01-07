@@ -1,0 +1,7 @@
+"dataset_name": "world_religions"
+"include": "_default_egyptianmmluV2_template_yaml"
+"tag":
+- "egyptianmmluV2_humanities_tasks"
+- "egyptianmmluV2_mmlu_tasks"
+"task": "egyptianmmluV2_world_religions"
+"task_alias": "world religions"
