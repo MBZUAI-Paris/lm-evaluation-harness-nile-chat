@@ -1,9 +1,0 @@
-group: egyptianmmluV2
-task:
-- egyptianmmluV2_mmlu
-- egyptianmmluV2_arabic_mmlu
-aggregate_metric_list:
-  - metric: acc
-    weight_by_size: True
-metadata:
-  version: 0

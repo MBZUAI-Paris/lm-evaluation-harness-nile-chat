@@ -1,7 +1,0 @@
-"dataset_name": "biology"
-"include": "_default_egyptianmmluV2_template_yaml"
-"tag":
-- "egyptianmmluV2_stem_tasks"
-- "egyptianmmluV2_arabic_mmlu_tasks"
-"task": "egyptianmmluV2_biology"
-"task_alias": "biology"

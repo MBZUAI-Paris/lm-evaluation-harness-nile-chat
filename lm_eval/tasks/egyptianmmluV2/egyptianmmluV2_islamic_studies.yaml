@@ -1,7 +1,0 @@
-"dataset_name": "islamic_studies"
-"include": "_default_egyptianmmluV2_template_yaml"
-"tag":
-- "egyptianmmluV2_humanities_tasks"
-- "egyptianmmluV2_arabic_mmlu_tasks"
-"task": "egyptianmmluV2_islamic_studies"
-"task_alias": "islamic studies"

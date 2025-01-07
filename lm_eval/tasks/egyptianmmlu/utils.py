@@ -14,10 +14,10 @@ def doc_to_text(doc):
     )
 
     options = []
-    for i, opt in enumerate(eval(str(doc["choices"]))):
+    for i, opt in enumerate(doc["choices"]):
         options.append(f"{alpha[i]} {opt}")
     doc_text = PROMPT.format(subject, question, "\n".join(options))
     return doc_text
 
 def doc_to_choice(doc):
-    return [alpha[i][0] for i in range(len(eval(str(doc['choices']))))]
+    return [alpha[i][0] for i in range(len(doc["choices"]))]

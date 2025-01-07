@@ -1,7 +1,0 @@
-"dataset_name": "civics"
-"include": "_default_egyptianmmluV2_template_yaml"
-"tag":
-- "egyptianmmluV2_social_sciences_tasks"
-- "egyptianmmluV2_arabic_mmlu_tasks"
-"task": "egyptianmmluV2_civics"
-"task_alias": "civics"

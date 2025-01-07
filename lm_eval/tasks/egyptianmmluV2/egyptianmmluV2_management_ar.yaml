@@ -1,7 +1,0 @@
-"dataset_name": "management_ar"
-"include": "_default_egyptianmmluV2_template_yaml"
-"tag":
-- "egyptianmmluV2_other_tasks"
-- "egyptianmmluV2_arabic_mmlu_tasks"
-"task": "egyptianmmluV2_management_ar"
-"task_alias": "management ar"

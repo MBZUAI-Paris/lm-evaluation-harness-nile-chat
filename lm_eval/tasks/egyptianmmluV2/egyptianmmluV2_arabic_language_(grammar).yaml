@@ -1,7 +1,0 @@
-"dataset_name": "arabic_language_(grammar)"
-"include": "_default_egyptianmmluV2_template_yaml"
-"tag":
-- "egyptianmmluV2_language_tasks"
-- "egyptianmmluV2_arabic_mmlu_tasks"
-"task": "egyptianmmluV2_arabic_language_(grammar)"
-"task_alias": "arabic language (grammar)"
