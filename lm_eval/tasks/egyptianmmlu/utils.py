@@ -20,4 +20,8 @@ def doc_to_text(doc):
     return doc_text
 
 def doc_to_choice(doc):
-    return [alpha[i][0] for i in range(len(doc["choices"]))]
+    try:
+        return [alpha[i][0] for i in range(len(doc["choices"]))]
+    except Exception as e:
+        print(doc)
+        raise e
