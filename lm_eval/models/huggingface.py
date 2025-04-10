@@ -208,7 +208,7 @@ class HFLM(TemplateLM):
         self.tokenizer = configure_pad_token(self.tokenizer, model_config=self.config)
 
         self.add_bos_token = add_bos_token
-        if "gemma" in getattr(self.config, "model_type", ""): #and self.tokenizer.chat_template is None:
+        if "gemma" in getattr(self.config, "model_type", ""):
             self.add_bos_token = True
             eval_logger.info(
                 f"Model type is '{self.config.model_type}', part of the Gemma family--a BOS token will be used as Gemma underperforms without it."
@@ -447,7 +447,7 @@ class HFLM(TemplateLM):
     def _get_backend(
         self,
         config: Union[transformers.PretrainedConfig, transformers.AutoConfig],
-        backend: Optional[Literal["default", "causal", "seq2seq", "gemma3"]] = "default",
+        backend: Optional[Literal["default", "causal", "seq2seq"]] = "default",
         trust_remote_code: Optional[bool] = False,
     ) -> None:
         """
@@ -455,7 +455,7 @@ class HFLM(TemplateLM):
         Determines the backend ("causal" (decoder-only) or "seq2seq" (encoder-decoder))
         model type to be used.
         """
-        assert backend in ["default", "causal", "seq2seq", "gemma3"]
+        assert backend in ["default", "causal", "seq2seq"]
 
         if backend != "default":
             # if we've settled on non-default backend, use that manually
@@ -463,8 +463,6 @@ class HFLM(TemplateLM):
                 self.AUTO_MODEL_CLASS = transformers.AutoModelForCausalLM
             elif backend == "seq2seq":
                 self.AUTO_MODEL_CLASS = transformers.AutoModelForSeq2SeqLM
-            elif backend == "gemma3":
-                self.AUTO_MODEL_CLASS = transformers.Gemma3ForConditionalGeneration
             eval_logger.info(
                 f"Overrode HF model backend type, and using type '{backend}'"
             )
@@ -495,7 +493,6 @@ class HFLM(TemplateLM):
         assert self.AUTO_MODEL_CLASS in [
             transformers.AutoModelForCausalLM,
             transformers.AutoModelForSeq2SeqLM,
-            transformers.Gemma3ForConditionalGeneration
         ]
         return None
 
@@ -575,8 +572,6 @@ class HFLM(TemplateLM):
                 trust_remote_code=trust_remote_code,
                 **model_kwargs,
             )
-            if self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
-                self._model = self._model.language_model
         else:
             try:
                 from auto_gptq import AutoGPTQForCausalLM
@@ -756,7 +751,7 @@ class HFLM(TemplateLM):
 
         # by default for CausalLM - false or self.add_bos_token is set
         if add_special_tokens is None:
-            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM  or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
                 special_tokens_kwargs = {
                     "add_special_tokens": False or self.add_bos_token
                 }
@@ -784,7 +779,7 @@ class HFLM(TemplateLM):
         self.tokenizer.padding_side = padding_side
 
         add_special_tokens = {}
-        if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+        if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
             add_special_tokens = {"add_special_tokens": False or self.add_bos_token}
 
         encoding = self.tokenizer(
@@ -829,7 +824,7 @@ class HFLM(TemplateLM):
                     input_ids=inps, attention_mask=attn_mask, labels=labels
                 ).logits
             else:
-                assert self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration
+                assert self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM
                 return self.model(inps).logits
 
     def _model_generate(self, context, max_length, stop, **generation_kwargs):
@@ -862,7 +857,7 @@ class HFLM(TemplateLM):
     def _select_cont_toks(
         self, logits: torch.Tensor, contlen: int = None, inplen: int = None
     ) -> torch.Tensor:
-        if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+        if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
             assert (
                 contlen and inplen
             ), "Must pass input len and cont. len to select scored logits for causal LM"
@@ -989,7 +984,7 @@ class HFLM(TemplateLM):
             requests,
             sort_fn=_collate,
             group_by="contexts"
-            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration
+            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM
             and self.logits_cache
             else None,
             group_fn=_lookup_one_token_cont,
@@ -1047,7 +1042,7 @@ class HFLM(TemplateLM):
                 # cont_toks      4 5 6 7 8 9      [:, -len(continuation_enc):, :self.vocab_size] slice
 
                 # when too long to fit in context, truncate from the left
-                if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+                if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
                     inp = torch.tensor(
                         (context_enc + continuation_enc)[-(self.max_length + 1) :][:-1],
                         dtype=torch.long,
@@ -1094,7 +1089,7 @@ class HFLM(TemplateLM):
 
             # create encoder attn mask and batched conts, if seq2seq
             call_kwargs = {}
-            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
                 batched_inps = pad_and_concat(
                     padding_len_inp, inps, padding_side="right"
                 )  # [batch, padding_len_inp]
@@ -1129,7 +1124,7 @@ class HFLM(TemplateLM):
                 # from prompt/prefix tuning tokens, if applicable
                 ctx_len = (
                     inplen + (logits.shape[0] - padding_len_inp)
-                    if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM  or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration
+                    if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM
                     else None
                 )
                 logits = self._select_cont_toks(logits, contlen=contlen, inplen=ctx_len)
@@ -1258,7 +1253,7 @@ class HFLM(TemplateLM):
                 max_gen_toks = self.max_gen_toks
 
             # set the max length in tokens of inputs ("context_enc")
-            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+            if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
                 # max len for inputs = max length, minus room to generate the max new tokens
                 max_ctx_len = self.max_length - max_gen_toks
             elif self.AUTO_MODEL_CLASS == transformers.AutoModelForSeq2SeqLM:
@@ -1288,7 +1283,7 @@ class HFLM(TemplateLM):
             cont_toks_list = cont.tolist()
             for cont_toks, context in zip(cont_toks_list, contexts):
                 # discard context + left-padding toks if using causal decoder-only LM
-                if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM or self.AUTO_MODEL_CLASS == transformers.Gemma3ForConditionalGeneration:
+                if self.AUTO_MODEL_CLASS == transformers.AutoModelForCausalLM:
                     cont_toks = cont_toks[context_enc.shape[1] :]
 
                 s = self.tok_decode(cont_toks)
