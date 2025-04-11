@@ -17,11 +17,11 @@ class Strip(Filter):
         return map(lambda r: r[0].strip(), resps)
 
         
-def dr_ar(dataset: datasets.Dataset):
-    return dataset.filter(lambda x: x["direction"] == "dr_ar")
+def ltn_eg(dataset: datasets.Dataset):
+    return dataset.filter(lambda x: x["direction"] == "ltn_eg")
 
-def ar_dr(dataset: datasets.Dataset):
-    return dataset.filter(lambda x: x["direction"] == "ar_dr")
+def eg_ltn(dataset: datasets.Dataset):
+    return dataset.filter(lambda x: x["direction"] == "eg_ltn")
 
 def doc_to_text(doc):
     doc_text = doc["messages"][0]["content"]
