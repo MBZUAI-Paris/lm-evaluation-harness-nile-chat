@@ -1,16 +1,13 @@
 output_type: generate_until
 dataset_path: MBZUAI-Paris/EgyptianBench
-test_split: summarization
-dataset_name: summarization
+test_split: transliteration
 doc_to_text: !function utils.doc_to_text
 doc_to_target: !function utils.doc_to_target
 metric_list:
-  - metric: !function utils.rouge1
-  - metric: !function utils.rouge2
-  - metric: !function utils.rougeL
-  - metric: !function utils.rougeLsum
-  - metric: !function utils.bert
+  - metric: bleu
+  - metric: ter
   - metric: chrf
+  - metric: !function utils.bert
 generation_kwargs:
   until:
     - "<end_of_turn>"
@@ -21,7 +18,6 @@ generation_kwargs:
     - "<|endoftext|>"
   do_sample: false
   temperature: 0.0
-  max_new_tokens: 128
 filter_list:
   - name: "STRIP_ANSWER"
     filter:

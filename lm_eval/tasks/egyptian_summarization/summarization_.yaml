@@ -1,7 +1,7 @@
 "include": "summarization_common_yaml"
 "tag":
 - "egyptian_summarization_task"
-"task": "summarization"
+"task": "summarization_"
 metric_list:
   - metric: !function utils.bert
     aggregation: !function utils.egybert
