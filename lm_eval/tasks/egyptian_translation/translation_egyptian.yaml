@@ -1,8 +1,8 @@
 group: egyptian_translation
 group_alias: translation
 task:
-  - long_translation
-  - short_translation
+  - long_translation_overall
+  - short_translation_overall
 metric_list:
   - metric: bleu
     aggregation: bleu
