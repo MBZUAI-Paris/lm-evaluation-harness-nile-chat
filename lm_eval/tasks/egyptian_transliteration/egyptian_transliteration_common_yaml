@@ -6,7 +6,7 @@ doc_to_text: !function utils.doc_to_text
 doc_to_target: !function utils.doc_to_target
 metric_list:
   - metric: bleu
-  - metric: ter
+  # - metric: ter
   - metric: chrf
   - metric: !function utils.bert
 generation_kwargs:
@@ -23,6 +23,6 @@ filter_list:
   - name: "STRIP_ANSWER"
     filter:
       - function: "strip"
-repeats: 1
+# repeats: 1
 metadata:
   version: 1.0
