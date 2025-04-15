@@ -4,7 +4,7 @@ doc_to_text: !function utils.doc_to_text
 doc_to_target: !function utils.doc_to_target
 metric_list:
   - metric: bleu
-  - metric: ter
+  # - metric: ter
   - metric: chrf
   - metric: !function utils.bert
 generation_kwargs:

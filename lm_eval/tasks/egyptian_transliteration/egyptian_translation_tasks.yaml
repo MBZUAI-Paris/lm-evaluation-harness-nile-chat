@@ -1,7 +1,7 @@
 group: egyptian_transliteration
-group_alias: transliteration
+group_alias: egyptian_transliteration
 task:
-  - transliteration
+  - egyptian_transliteration_tasks
 metric_list:
   - metric: bleu
     aggregation: bleu

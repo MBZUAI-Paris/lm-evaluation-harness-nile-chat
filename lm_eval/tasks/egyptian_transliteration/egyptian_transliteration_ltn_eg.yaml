@@ -1,9 +1,9 @@
-"process_docs": !function utils.eg_ltn
-"include": "transliteration_common_yaml"
+"process_docs": !function utils.ltn_eg
+"include": "egyptian_transliteration_common_yaml"
 "tag":
   - "egyptian_transliteration_tasks"
-"task": "transliteration_eg_ltn"
-"task_alias": "eg_ltn"
+"task": "egyptian_transliteration_ltn_eg"
+"task_alias": "ltn_eg"
 metric_list:
   - metric: !function utils.bert
     aggregation: !function utils.mbert
